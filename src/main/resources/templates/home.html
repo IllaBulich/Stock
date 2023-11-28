@@ -1,0 +1,46 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title th:text="Главная"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link   rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
+</head>
+<body>
+
+<header th:insert="blocks/header :: header" ></header>
+
+
+<main>
+    <div class="container mt-0">
+            <form class="row g-3" th:action="@{|${#httpServletRequest.requestURL}|}" method="get">
+            <div class="col-6">
+                <input type="search" name="title" class="form-control" placeholder="Search..." aria-label="Search">
+            </div>
+            <div class="col-5">
+                <div class="input-group mb-3">
+                    <span class="input-group-text">Цена от</span>
+                    <input type="number" class="form-control" name="min">
+                    <span class="input-group-text">до</span>
+                    <input type="number" class="form-control" name="max">
+                </div>
+            </div>
+            <div class="col">
+                <div class="input-group mb-3">
+                    <input  class="input-group-text" type="submit" th:value="поиск"/>
+                </div>
+            </div>
+
+        </form>
+    </div>
+    <br>
+
+    <header th:insert="blocks/immovables :: immovables" th:with="immovables=${immovables}"></header>
+
+
+
+</main>
+
+<div th:insert="blocks/footer :: footer"></div>
+</body>
+</html>
