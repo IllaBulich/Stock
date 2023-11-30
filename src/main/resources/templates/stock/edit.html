@@ -28,7 +28,10 @@
                 <span class="input-group-text">Введите адрес</span>
                 <input type="text" th:value="${stock.address}" class="form-control" name="address">
             </div>
-
+            <div class="input-group input-group-sm mb-3">
+                <span class="input-group-text">Количесто стилажей</span>
+                <input type="number" th:value="${stock.number_racks}"  min="0"  class="form-control" name="number_racks">
+            </div>
 
         <button type="submit" class="btn btn-success">Обновить</button>
         </form>

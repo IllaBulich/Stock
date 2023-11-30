@@ -26,6 +26,10 @@
                 <input type="number"  min="0" max="1000" step="0.01"  th:value="${product.purchase_price}" class="form-control" name="purchase_price">
             </div>
             <div class="input-group input-group-sm mb-3">
+                <span class="input-group-text">Сколько помещается в стеллаж</span>
+                <input type="number" th:value="${product.quantity_rack}" min="0"  class="form-control" name="quantity_rack" >
+            </div>
+            <div class="input-group input-group-sm mb-3">
                 <span class="input-group-text">Артикул</span>
                 <input type="text" th:value="${product.vendor_code}" class="form-control" name="vendor_code">
             </div>
@@ -38,5 +42,6 @@
     </div>
 
     <div th:insert="blocks/footer :: footer"></div>
+</div>
 </body>
 </html>

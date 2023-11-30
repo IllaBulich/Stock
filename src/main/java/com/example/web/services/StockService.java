@@ -1,5 +1,6 @@
 package com.example.web.services;
 
+import com.example.web.exception.ProductNotFoundException;
 import com.example.web.models.Product;
 import com.example.web.models.Stock;
 import com.example.web.models.StockItem;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @Slf4j
@@ -22,45 +24,6 @@ public class StockService {
     private final StockRepository stockRepository;
     private final ProductRepository productRepository;
     private final StockItemRepository stockItemRepository;
-
-    public void addProductsToStock(Long stockId, List<Long> productIds, List<Integer> quantities) {
-
-        log.info(String.valueOf(stockId),productIds,quantities);
-        Optional<Stock> optionalStock = stockRepository.findById(stockId);
-
-        if (optionalStock.isPresent()) {
-            Stock stock = optionalStock.get();
-
-            for (int i = 0; i < productIds.size(); i++) {
-                Long productId = productIds.get(i);
-                Integer quantity = quantities.get(i);
-
-                Optional<Product> optionalProduct = productRepository.findById(productId);
-
-                if (optionalProduct.isPresent()) {
-                    Product product = optionalProduct.get();
-
-                    // Создаем StockItem и устанавливаем связи
-                    StockItem stockItem = new StockItem();
-                    stockItem.setStock(stock);
-                    stockItem.setProduct(product);
-                    stockItem.setQuantity(quantity);
-
-                    // Добавляем StockItem к списку StockItems в Stock
-                    stock.getStockItems().add(stockItem);
-                } else {
-                    // Обработка случая, если продукт не найден
-                    // Можно выбросить исключение или обработать иным способом
-                }
-            }
-
-            // Сохраняем обновленный Stock в базу данных
-            stockRepository.save(stock);
-        } else {
-            // Обработка случая, если склад не найден
-            // Можно выбросить исключение или обработать иным способом
-        }
-    }
 
     public List<Stock> findAll(){
         return stockRepository.findAll();
@@ -83,6 +46,7 @@ public class StockService {
         stock.setCity(stockNow.getCity());
         stock.setAddress(stockNow.getAddress());
         stock.setStreet(stockNow.getStreet());
+        stock.setNumber_racks(stockNow.getNumber_racks());
         stockRepository.save(stock);
 
     }
@@ -116,6 +80,7 @@ public class StockService {
             // Можно выбросить исключение или обработать иным способом
         }
     }
+
     public Stock findStockItem(Long stockItemId){
         Optional<StockItem> optionalStockItem = stockItemRepository.findById(stockItemId);
 
@@ -142,5 +107,59 @@ public class StockService {
             // Обработка случая, если StockItem не найден
             // Можно выбросить исключение или обработать иным способом
         }
+    }
+    public void addProductsToStock(Long stockId, List<Long> productIds, List<Integer> quantities) {
+
+        log.info(String.valueOf(stockId),productIds,quantities);
+        Optional<Stock> optionalStock = stockRepository.findById(stockId);
+
+        if (optionalStock.isPresent()) {
+            Stock stock = optionalStock.get();
+
+            for (int i = 0; i < productIds.size(); i++) {
+                Long productId = productIds.get(i);
+                Integer quantity = quantities.get(i);
+
+                Optional<Product> optionalProduct = productRepository.findById(productId);
+
+                if (optionalProduct.isPresent()) {
+                    Product product = optionalProduct.get();
+                    if (checkPush(stock,product,quantity)) {
+
+                        // Создаем StockItem и устанавливаем связи
+                        StockItem stockItem = new StockItem();
+                        stockItem.setStock(stock);
+                        stockItem.setProduct(product);
+                        stockItem.setQuantity(quantity);
+
+                        // Добавляем StockItem к списку StockItems в Stock
+                        stock.getStockItems().add(stockItem);
+                    }else {
+                        throw new ProductNotFoundException("недостаточно местая на складе");
+                    }
+                } else {
+                    // Обработка случая, если продукт не найден
+                    // Можно выбросить исключение или обработать иным способом
+                    throw new ProductNotFoundException("Продукт не найден");
+                }
+            }
+
+            // Сохраняем обновленный Stock в базу данных
+            stockRepository.save(stock);
+        } else {
+            // Обработка случая, если склад не найден
+            // Можно выбросить исключение или обработать иным способом
+        }
+    }
+
+    private boolean checkPush(Stock stock, Product product, Integer quantity ){
+        Float plenum = (float) 0;
+        Float plenumNew = (float) (quantity/product.getQuantity_rack());
+
+        for (StockItem stockItem:stock.getStockItems()){
+            plenum += (float) stockItem.getQuantity() /
+                    stockItem.getProduct().getQuantity_rack();
+        }
+        return plenum + plenumNew <= stock.getNumber_racks();
     }
 }

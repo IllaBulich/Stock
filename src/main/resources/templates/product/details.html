@@ -23,6 +23,10 @@
                     <div class="col"><b>Артикул: </b></div>
                     <div class="col"><span th:text=" ${product.vendor_code}"/></div>
                 </li>
+                <li class="row mb-1">
+                    <div class="col"><b>Помещяется на один стелаж: </b></div>
+                    <div class="col"><span th:text=" ${product.quantity_rack}"/></div>
+                </li>
             </ul>
             <div><h4>Описание: </h4><p th:text="${product.description}"/></div>
         </div>

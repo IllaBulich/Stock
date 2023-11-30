@@ -123,8 +123,9 @@ public class StockController {
             @RequestParam(value = "num") Integer num,
             Model model){
         log.info("Ban user stockItemId={}; num={}",stockItemId,num);
+        String id = String.valueOf(stockService.findStockItem(stockItemId).getId());
         stockService.decreaseStockItemQuantity(stockItemId, num);
-        return "redirect:/stocks/details/"+stockService.findStockItem(stockItemId).getId();
+        return "redirect:/stocks/details/"+id;
     }
 
 

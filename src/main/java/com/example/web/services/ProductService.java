@@ -19,7 +19,7 @@ public class ProductService {
 
     public List<Product> findAll(){return productRepository.findAll();}
 
-    public void saveStock(Principal principal, Product product) {
+    public void saveProduct(Principal principal, Product product) {
         log.info("Ban user id={}; name={}",product.getId(),product.getName());
         productRepository.save(product);
     }
@@ -35,6 +35,7 @@ public class ProductService {
         product.setDescription(productNow.getDescription());
         product.setPurchase_price(productNow.getPurchase_price());
         product.setVendor_code(productNow.getVendor_code());
+        product.setQuantity_rack(productNow.getQuantity_rack());
         productRepository.save(product);
 
     }

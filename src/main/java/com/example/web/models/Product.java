@@ -24,4 +24,5 @@ public class Product {
 
     private float  purchase_price;
     private String vendor_code;
+    private Integer quantity_rack;
 }

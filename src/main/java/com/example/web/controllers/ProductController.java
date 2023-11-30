@@ -35,7 +35,7 @@ public class ProductController {
     public String postProductAdd(
             Product product,
             Principal principal) {
-        productService.saveStock(principal,product);
+        productService.saveProduct(principal,product);
         return "redirect:/products";
     }
 
