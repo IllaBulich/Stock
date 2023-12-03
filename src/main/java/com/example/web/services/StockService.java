@@ -12,9 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -108,18 +106,19 @@ public class StockService {
             // Можно выбросить исключение или обработать иным способом
         }
     }
-    public void addProductsToStock(Long stockId, List<Long> productIds, List<Integer> quantities) {
+    public void addProductsToStock(Long stockId,Map<Long, Integer> map) {
 
-        log.info(String.valueOf(stockId),productIds,quantities);
+
         Optional<Stock> optionalStock = stockRepository.findById(stockId);
 
         if (optionalStock.isPresent()) {
             Stock stock = optionalStock.get();
 
-            for (int i = 0; i < productIds.size(); i++) {
-                Long productId = productIds.get(i);
-                Integer quantity = quantities.get(i);
 
+            for (Map.Entry<Long, Integer> entry : map.entrySet()) {
+                Long productId = entry.getKey();
+                Integer quantity = entry.getValue();
+                // Ваш код обработки key и value
                 Optional<Product> optionalProduct = productRepository.findById(productId);
 
                 if (optionalProduct.isPresent()) {

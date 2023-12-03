@@ -13,55 +13,37 @@
 <div class="container mt-5 md-5">
     <h2>Add Products to Stock</h2>
 
-    <form th:action="@{/stocks/addProducts}" method="post" id="myForm">
+    <form th:action="@{/stocks/addProducts}" method="post" th:object="${productForm}" >
 
-<!--        <label for="stockId">Stock ID:</label>-->
-<!--        <input type="text" id="stockId" name="stockId" required><br>-->
-
-<!--        <label for="productIds">Product IDs (comma-separated):</label>-->
-<!--        <input type="text" id="productIds" name="productIds" required><br>-->
-
-<!--        <label for="quantities">Quantities (comma-separated):</label>-->
-<!--        <input type="text" id="quantities" name="quantities" required><br>-->
         <select class="form-select" aria-label="Default select example" name="stockId">
             <option  th:each="el : ${stocks}" th:value="${el.id}" th:text="${el.title}"/>
 
         </select>
 
         <div class="container mt-5">
-
-
             <h1>Продукты</h1>
             <table class="table table-striped-columns">
                 <thead>
                 <tr>
-
                     <th scope="col">Название</th>
-                    <th scope="col">Количество</th>
                     <th scope="col">Описание</th>
                     <th scope="col">Стоймасть закупки</th>
                     <th scope="col">Артикул</th>
-                    <th scope="col"></th>
+                    <th scope="col">Количество</th>
+
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="el:${products}">
-                    <th><input type="checkbox" th:value="${el.id}" name="productIds">
-                        <label th:for="${'product_' + el.id}" th:text="${el.name}"></label></th>
-                    <th><input type="number" th:name="quantities" th:id="'quantity_' + ${el.id}" placeholder="Quantity"></th>
-                    <th><p th:text="${el.description}"/></th>
-                    <th th:text="${el.purchase_price}"/>
-                    <th th:text="${el.vendor_code}"/>
-
-
+                    <th th:text="${el.name}">
+                    <th th:text="${el.description}">
+                    <th th:text="${el.purchase_price}">
+                    <th th:text="${el.vendor_code}">
+                    <td><input type="number" min="0" th:field="*{quantities[__${el.id}__]}" /></td>
                 </tr>
                 </tbody>
             </table>
         </div>
-
-
-
-
 
         <button type="submit">Add Products</button>
     </form>
@@ -71,28 +53,7 @@
 
 
 <div th:insert="blocks/footer :: footer"></div>
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-<script>
-    function submitForm() {
-        // Собираем ID и количество для каждого элемента
-        var productData = [];
-        $('input[type="number"]').each(function () {
-            var id = $(this).attr('id').replace('quantity_', '');
-            var quantity = $(this).val();
-            productData.push({ id: id, quantity: quantity });
-        });
 
-        // Создаем скрытое поле формы для отправки данных на сервер
-        productData = JSON.stringify(productData);
-
-
-        // Добавляем скрытое поле в форму
-        $('#myForm').append(productData);
-
-        // Отправляем форму на сервер
-        $('#myForm').submit();
-    }
-</script>
 
 </body>
 </html>

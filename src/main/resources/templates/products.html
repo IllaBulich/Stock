@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Product List</title>
+</head>
+<body>
+<form th:action="@{/submit}" th:object="${productForm}" method="post">
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Product</th>
+            <th>Quantity</th>
+        </tr>
+        <tr th:each="product : ${products}">
+            <td th:text="${product.id}"></td>
+            <td th:text="${product.name}"></td>
+            <td><input type="number" min="0" th:field="*{quantities[__${product.id}__]}" /></td>
+        </tr>
+    </table>
+    <button type="submit">Submit</button>
+</form>
+</body>
+</html>

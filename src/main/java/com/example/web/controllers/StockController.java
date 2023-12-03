@@ -1,13 +1,14 @@
 package com.example.web.controllers;
 
+import com.example.web.models.Product;
+import com.example.web.models.ProductForm;
 import com.example.web.models.Stock;
 import com.example.web.services.ProductService;
 import com.example.web.services.StockService;
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -31,8 +32,17 @@ public class StockController {
     @GetMapping("/addProducts")
     public String addProductsToStockGet(
             Model model){
+        List<Product> products = productService.findAll();
+
+        ProductForm productForm = new ProductForm();
+        for (Product product : products) {
+            productForm.getQuantities().put(product.getId(), 0);
+        }
+
+        model.addAttribute("products", products);
+        model.addAttribute("productForm", productForm);
         model.addAttribute("stocks",stockService.findAll());
-        model.addAttribute("products",productService.findAll());
+
         return "stock/add_products";
     }
 
@@ -40,16 +50,15 @@ public class StockController {
     @PostMapping("/addProducts")
     public String addProductsToStockPost(
             @RequestParam Long stockId,
-            @RequestParam(value = "productIds", required = false) List<Long> productIds,
-            @RequestParam List<Integer> quantities)  {
-        if (quantities != null) {
-            // Создаем новый List<Integer>, содержащий только элементы, не равные null
-            List<Integer> nonNullQuantities = quantities.stream()
-                    .filter(Objects::nonNull)
-                    .collect(Collectors.toList());
-            log.info("Product ID: " + productIds + ", Quantity: " + nonNullQuantities);
-            stockService.addProductsToStock(stockId, productIds, nonNullQuantities);
-        }
+            ProductForm productForm
+    ){
+
+        Map<Long, Integer> Quantities = productForm.getQuantities();
+        log.info("Quantities={}",Quantities);
+        Quantities.values().removeIf(value -> value == 0);
+        log.info("Quantities={}",Quantities);
+        stockService.addProductsToStock(stockId,Quantities);
+
         return "redirect:/stocks";
     }
 
