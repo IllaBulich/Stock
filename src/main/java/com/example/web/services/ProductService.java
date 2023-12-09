@@ -1,7 +1,6 @@
 package com.example.web.services;
 
 import com.example.web.models.Product;
-import com.example.web.models.Stock;
 import com.example.web.repo.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,10 +16,12 @@ public class ProductService {
 
     private final ProductRepository productRepository;
 
-    public List<Product> findAll(){return productRepository.findAll();}
+    public List<Product> findAll() {
+        return productRepository.findAll();
+    }
 
     public void saveProduct(Principal principal, Product product) {
-        log.info("Ban user id={}; name={}",product.getId(),product.getName());
+        log.info("Ban user id={}; name={}", product.getId(), product.getName());
         productRepository.save(product);
     }
 
@@ -43,7 +44,6 @@ public class ProductService {
     public void deleteStock(long id) {
         productRepository.deleteById(id);
     }
-
 
 
 }

@@ -12,7 +12,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -23,13 +25,13 @@ public class StockService {
     private final ProductRepository productRepository;
     private final StockItemRepository stockItemRepository;
 
-    public List<Stock> findAll(){
+    public List<Stock> findAll() {
         return stockRepository.findAll();
     }
 
 
     public void saveStock(Principal principal, Stock stock) {
-        log.info("Ban user id={}; Title={}",stock.getId(),stock.getTitle());
+        log.info("Ban user id={}; Title={}", stock.getId(), stock.getTitle());
         stockRepository.save(stock);
     }
 
@@ -79,7 +81,7 @@ public class StockService {
         }
     }
 
-    public Stock findStockItem(Long stockItemId){
+    public Stock findStockItem(Long stockItemId) {
         Optional<StockItem> optionalStockItem = stockItemRepository.findById(stockItemId);
 
         if (optionalStockItem.isPresent()) {
@@ -88,6 +90,7 @@ public class StockService {
         }
         return null;
     }
+
     public void removeStockItem(Long stockItemId) {
         Optional<StockItem> optionalStockItem = stockItemRepository.findById(stockItemId);
 
@@ -106,7 +109,8 @@ public class StockService {
             // Можно выбросить исключение или обработать иным способом
         }
     }
-    public void addProductsToStock(Long stockId,Map<Long, Integer> map) {
+
+    public void addProductsToStock(Long stockId, Map<Long, Integer> map) {
 
 
         Optional<Stock> optionalStock = stockRepository.findById(stockId);
@@ -123,7 +127,7 @@ public class StockService {
 
                 if (optionalProduct.isPresent()) {
                     Product product = optionalProduct.get();
-                    if (checkPush(stock,product,quantity)) {
+                    if (checkPush(stock, product, quantity)) {
 
                         // Создаем StockItem и устанавливаем связи
                         StockItem stockItem = new StockItem();
@@ -133,7 +137,7 @@ public class StockService {
 
                         // Добавляем StockItem к списку StockItems в Stock
                         stock.getStockItems().add(stockItem);
-                    }else {
+                    } else {
                         throw new ProductNotFoundException("недостаточно местая на складе");
                     }
                 } else {
@@ -151,11 +155,11 @@ public class StockService {
         }
     }
 
-    private boolean checkPush(Stock stock, Product product, Integer quantity ){
+    private boolean checkPush(Stock stock, Product product, Integer quantity) {
         Float plenum = (float) 0;
-        Float plenumNew = (float) (quantity/product.getQuantity_rack());
+        Float plenumNew = (float) (quantity / product.getQuantity_rack());
 
-        for (StockItem stockItem:stock.getStockItems()){
+        for (StockItem stockItem : stock.getStockItems()) {
             plenum += (float) stockItem.getQuantity() /
                     stockItem.getProduct().getQuantity_rack();
         }

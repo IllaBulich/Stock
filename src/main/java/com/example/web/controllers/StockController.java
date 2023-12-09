@@ -5,8 +5,6 @@ import com.example.web.models.ProductForm;
 import com.example.web.models.Stock;
 import com.example.web.services.ProductService;
 import com.example.web.services.StockService;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,8 +15,7 @@ import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import java.util.stream.Collectors;
+
 
 @Slf4j
 @Controller
@@ -31,7 +28,7 @@ public class StockController {
 
     @GetMapping("/addProducts")
     public String addProductsToStockGet(
-            Model model){
+            Model model) {
         List<Product> products = productService.findAll();
 
         ProductForm productForm = new ProductForm();
@@ -41,7 +38,7 @@ public class StockController {
 
         model.addAttribute("products", products);
         model.addAttribute("productForm", productForm);
-        model.addAttribute("stocks",stockService.findAll());
+        model.addAttribute("stocks", stockService.findAll());
 
         return "stock/add_products";
     }
@@ -51,24 +48,25 @@ public class StockController {
     public String addProductsToStockPost(
             @RequestParam Long stockId,
             ProductForm productForm
-    ){
+    ) {
 
         Map<Long, Integer> Quantities = productForm.getQuantities();
-        log.info("Quantities={}",Quantities);
+        log.info("Quantities={}", Quantities);
         Quantities.values().removeIf(value -> value == 0);
-        log.info("Quantities={}",Quantities);
-        stockService.addProductsToStock(stockId,Quantities);
+        log.info("Quantities={}", Quantities);
+        stockService.addProductsToStock(stockId, Quantities);
 
         return "redirect:/stocks";
     }
 
     @GetMapping("")
-    public String stocksMain( Model model){
-        model.addAttribute("stocks",stockService.findAll());
+    public String stocksMain(Model model) {
+        model.addAttribute("stocks", stockService.findAll());
         return "stock/main";
     }
+
     @GetMapping("/add")
-    public String stockAdd(Model  module){
+    public String stockAdd(Model module) {
         return "stock/add";
     }
 
@@ -76,7 +74,7 @@ public class StockController {
     public String postStockAdd(
             Stock stock,
             Principal principal) {
-        stockService.saveStock(principal,stock);
+        stockService.saveStock(principal, stock);
         return "redirect:/stocks";
     }
 
@@ -84,16 +82,16 @@ public class StockController {
     public String stockEdit(
             @PathVariable(value = "id") long id,
             Principal principal,
-            Model  model){
+            Model model) {
 //        User user = immovablesService.getUserByPrincipal(principal);
 
-        if(stockService.getStockById(id) == null)
+        if (stockService.getStockById(id) == null)
             return "redirect:/stocks";
 //        if(immovables.getUser() != user)
 //            return "redirect:/";
         Stock stock = stockService.getStockById(id);
-        model.addAttribute("stock",stock);
-        model.addAttribute("stock_items",stock.getStockItems());
+        model.addAttribute("stock", stock);
+        model.addAttribute("stock_items", stock.getStockItems());
         return "stock/edit";
     }
 
@@ -101,42 +99,43 @@ public class StockController {
     public String stockUpdate(
             @PathVariable(value = "id") long id,
             Stock stock,
-            Principal principal ) throws IOException {
-        stockService.editStock(id, principal,stock);
+            Principal principal) throws IOException {
+        stockService.editStock(id, principal, stock);
         return "redirect:/stocks";
     }
+
     @GetMapping("/details/{id}")
     public String stockDetails(
             @PathVariable(value = "id") long id,
             Principal principal,
-            Model  model){
-        if(stockService.getStockById(id) == null)
+            Model model) {
+        if (stockService.getStockById(id) == null)
             return "redirect:/stocks";
 //        User user = immovablesService.getUserByPrincipal(principal);
         Stock stock = stockService.getStockById(id);
-        model.addAttribute("stock",stock);
-        model.addAttribute("stock_items",stock.getStockItems());
+        model.addAttribute("stock", stock);
+        model.addAttribute("stock_items", stock.getStockItems());
         return "stock/details";
     }
 
     @PostMapping("/{id}/remove")
     public String postStockDelete(
             @PathVariable(value = "id") long id,
-            Model model){
+            Model model) {
         stockService.deleteStock(id);
         return "redirect:/stocks";
     }
+
     @PostMapping("/{id}/remove_stock_item")
     public String postStockItemDelete(
             @PathVariable(value = "id") long stockItemId,
             @RequestParam(value = "num") Integer num,
-            Model model){
-        log.info("Ban user stockItemId={}; num={}",stockItemId,num);
+            Model model) {
+        log.info("Ban user stockItemId={}; num={}", stockItemId, num);
         String id = String.valueOf(stockService.findStockItem(stockItemId).getId());
         stockService.decreaseStockItemQuantity(stockItemId, num);
-        return "redirect:/stocks/details/"+id;
+        return "redirect:/stocks/details/" + id;
     }
-
 
 
 }

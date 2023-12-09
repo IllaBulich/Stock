@@ -1,9 +1,7 @@
 package com.example.web.controllers;
 
 import com.example.web.models.Product;
-import com.example.web.models.Stock;
 import com.example.web.services.ProductService;
-import com.example.web.services.StockService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,12 +20,13 @@ public class ProductController {
     private ProductService productService;
 
     @GetMapping("")
-    public String  productMain( Model model){
-        model.addAttribute("products",productService.findAll());
+    public String productMain(Model model) {
+        model.addAttribute("products", productService.findAll());
         return "product/main";
     }
+
     @GetMapping("/add")
-    public String  productAdd(Model  module){
+    public String productAdd(Model module) {
         return "product/add";
     }
 
@@ -35,42 +34,43 @@ public class ProductController {
     public String postProductAdd(
             Product product,
             Principal principal) {
-        productService.saveProduct(principal,product);
+        productService.saveProduct(principal, product);
         return "redirect:/products";
     }
 
     @GetMapping("/{id}/edit")
-    public String  productEdit(
+    public String productEdit(
             @PathVariable(value = "id") long id,
             Principal principal,
-            Model  model){
+            Model model) {
 //        User user = immovablesService.getUserByPrincipal(principal);
 
-        if(productService.getStockById(id) == null)
+        if (productService.getStockById(id) == null)
             return "redirect:/products";
 //        if(immovables.getUser() != user)
 //            return "redirect:/";
-        model.addAttribute("product",productService.getStockById(id));
+        model.addAttribute("product", productService.getStockById(id));
         return "product/edit";
     }
 
     @PostMapping("/{id}/edit")
-    public String  productUpdate(
+    public String productUpdate(
             @PathVariable(value = "id") long id,
             Product product,
-            Principal principal ) throws IOException {
-        productService.editStock(id, principal,product);
+            Principal principal) throws IOException {
+        productService.editStock(id, principal, product);
         return "redirect:/products";
     }
+
     @GetMapping("/details/{id}")
-    public String  productDetails(
+    public String productDetails(
             @PathVariable(value = "id") long id,
             Principal principal,
-            Model  model){
-        if(productService.getStockById(id) == null)
+            Model model) {
+        if (productService.getStockById(id) == null)
             return "redirect:/products";
 //        User user = immovablesService.getUserByPrincipal(principal);
-        model.addAttribute("product",productService.getStockById(id));
+        model.addAttribute("product", productService.getStockById(id));
 
         return "product/details";
     }
@@ -78,11 +78,10 @@ public class ProductController {
     @PostMapping("/{id}/remove")
     public String postProductDelete(
             @PathVariable(value = "id") long id,
-            Model model){
+            Model model) {
         productService.deleteStock(id);
         return "redirect:/products";
     }
-
 
 
 }

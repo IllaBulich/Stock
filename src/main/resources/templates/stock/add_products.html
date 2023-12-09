@@ -13,10 +13,10 @@
 <div class="container mt-5 md-5">
     <h2>Add Products to Stock</h2>
 
-    <form th:action="@{/stocks/addProducts}" method="post" th:object="${productForm}" >
+    <form th:action="@{/stocks/addProducts}" method="post" th:object="${productForm}">
 
         <select class="form-select" aria-label="Default select example" name="stockId">
-            <option  th:each="el : ${stocks}" th:value="${el.id}" th:text="${el.title}"/>
+            <option th:each="el : ${stocks}" th:value="${el.id}" th:text="${el.title}"/>
 
         </select>
 
@@ -39,7 +39,7 @@
                     <th th:text="${el.description}">
                     <th th:text="${el.purchase_price}">
                     <th th:text="${el.vendor_code}">
-                    <td><input type="number" min="0" th:field="*{quantities[__${el.id}__]}" /></td>
+                    <td><input type="number" min="0" th:field="*{quantities[__${el.id}__]}"/></td>
                 </tr>
                 </tbody>
             </table>

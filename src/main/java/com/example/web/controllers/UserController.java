@@ -31,16 +31,17 @@ public class UserController {
 
     @PostMapping("/registration")
     public String createUser(User user, Model model) {
-        if (!userService.createUser(user)){
-            model.addAttribute("errorMassege","пользователь с email"+ user.getEmail()+"уже существует");
+        if (!userService.createUser(user)) {
+            model.addAttribute("errorMassege", "пользователь с email" + user.getEmail() + "уже существует");
             return "user/registration";
         }
         userService.createUser(user);
         return "redirect:/login";
     }
+
     @GetMapping("/user/info/{user}")
-    public String userInfo(@PathVariable("user") User user, Model model){
-        model.addAttribute("user",user);
+    public String userInfo(@PathVariable("user") User user, Model model) {
+        model.addAttribute("user", user);
 
 
         return "user/user-info";
@@ -52,10 +53,11 @@ public class UserController {
         model.addAttribute("user", user);
         return "user/user-account";
     }
+
     @PostMapping("/user/{id}/remove")
     public String postImmovablesDelete(
             @PathVariable(value = "id") long id,
-            Model model){
+            Model model) {
         userService.deleteUser(id);
         return "redirect:/admin";
     }

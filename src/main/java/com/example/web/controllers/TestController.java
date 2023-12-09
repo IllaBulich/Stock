@@ -3,7 +3,6 @@ package com.example.web.controllers;
 import com.example.web.models.Product;
 import com.example.web.models.ProductForm;
 import com.example.web.services.ProductService;
-import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,6 +18,7 @@ import java.util.Map;
 public class TestController {
     @Autowired
     private ProductService productService;
+
     @GetMapping("/productsss")
     public String showProductList(Model model) {
         // Замените этот код на ваш способ получения списка продуктов из базы данных
@@ -41,9 +41,9 @@ public class TestController {
         // productForm содержит Id продукта и количество для каждого продукта
         // Добавьте ваш код обработки данных, например, сохранение в базу данных
         Map<Long, Integer> Quantities = productForm.getQuantities();
-        log.info("Quantities={}",Quantities);
+        log.info("Quantities={}", Quantities);
         Quantities.values().removeIf(value -> value == 0);
-        log.info("Quantities={}",Quantities);
+        log.info("Quantities={}", Quantities);
 
         return "redirect:/products";
     }

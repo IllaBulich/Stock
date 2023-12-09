@@ -29,10 +29,6 @@ public class User implements UserDetails {
     @Column(name = "active")
     private boolean active;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "image_id")
-    private Image avatar;
-
     @Column(name = "password", length = 1000)
     private String password;
 
@@ -94,10 +90,8 @@ public class User implements UserDetails {
                 ", numberPhone='" + numberPhone + '\'' +
                 ", name='" + name + '\'' +
                 ", active=" + active +
-                ", avatar=" + avatar +
                 ", password='" + password + '\'' +
                 ", roles=" + roles +
-
                 ", dateOfCreated=" + dateOfCreated +
                 '}';
     }
