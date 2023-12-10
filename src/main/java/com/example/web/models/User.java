@@ -38,7 +38,8 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Set<Role> roles = new HashSet<>();
 
-
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<StockItem> stockItems;
 
 
     private LocalDateTime dateOfCreated;

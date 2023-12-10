@@ -22,7 +22,9 @@ public class Product {
     @Column(columnDefinition = "text")
     private String description;
 
-    private float  purchase_price;
+    private Float  purchase_price;
     private String vendor_code;
     private Integer quantity_rack;
+
+
 }

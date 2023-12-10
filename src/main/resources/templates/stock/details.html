@@ -55,7 +55,7 @@
                     <th th:text="${el.getProduct().vendor_code}"/>
                     <th th:text="${el.quantity}"/>
                     <th>
-                        <form  th:action="'/stocks/' + ${el.id} + '/remove_stock_item'" method="post">
+                        <form  th:action="'/items/' + ${el.id} + '/remove_stock_item'" method="post">
                             <!-- Кнопка для открытия модального окна -->
                             <button type="button" class="btn btn-primary" data-toggle="modal" th:data-target="'#myModal' + ${el.id}">
                                 Open Modal
@@ -74,7 +74,7 @@
                                         <div class="modal-body">
                                             <label>
                                                 <p th:text="${el.getProduct().name}"></p>
-                                                <input type="number"  min="0" th:max="${el.quantity}" class="form-control" name="num"   required>
+                                                <input type="number"  min="0" th:max="${el.quantity}" value="0" class="form-control" name="num"   required>
                                             </label>
                                             <br>
                                         </div>

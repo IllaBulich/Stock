@@ -11,15 +11,15 @@
             <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
                 <li><a href="/stocks" class="nav-link px-2 ">Склады</a></li>
                 <li><a href="/products" class="nav-link px-2">Продукты</a></li>
-                <li><a href="#" class="nav-link px-2">Розниц</a></li>
-                <li><a href="#" class="nav-link px-2">#</a></li>
+                <li><a href="/items/add-products" class="nav-link px-2">Поступление</a></li>
+                <li><a href="/items/sales-products" class="nav-link px-2">Отгрузка</a></li>
                 <li><a href="#" class="nav-link px-2">#</a></li>
             </ul>
 
             <div class="col-md-3 text-end">
                 <a  th:if="${#authorization.expression('isAnonymous()')}" href="/login" type="button" class="btn btn-outline-primary me-2">Войти</a>
                 <a  th:if="${#authorization.expression('isAnonymous()')}" href="/registration" type="button" class="btn btn-primary">Регистрация</a>
-                <a th:if="${#authorization.expression('isAuthenticated()')}" href="/user/account"th:text="${#authentication.principal.name}" />
+                <a th:if="${#authorization.expression('isAuthenticated()')}" href="/user/account"th:text="${#authentication.principal.name}"></a>
             </div>
 <!--            th:if="${#authorization.expression('isAnonymous()')}"-->
         </header>

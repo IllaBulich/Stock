@@ -23,41 +23,7 @@ import java.util.Map;
 public class StockController {
     @Autowired
     private StockService stockService;
-    @Autowired
-    private ProductService productService;
 
-    @GetMapping("/addProducts")
-    public String addProductsToStockGet(
-            Model model) {
-        List<Product> products = productService.findAll();
-
-        ProductForm productForm = new ProductForm();
-        for (Product product : products) {
-            productForm.getQuantities().put(product.getId(), 0);
-        }
-
-        model.addAttribute("products", products);
-        model.addAttribute("productForm", productForm);
-        model.addAttribute("stocks", stockService.findAll());
-
-        return "stock/add_products";
-    }
-
-
-    @PostMapping("/addProducts")
-    public String addProductsToStockPost(
-            @RequestParam Long stockId,
-            ProductForm productForm
-    ) {
-
-        Map<Long, Integer> Quantities = productForm.getQuantities();
-        log.info("Quantities={}", Quantities);
-        Quantities.values().removeIf(value -> value == 0);
-        log.info("Quantities={}", Quantities);
-        stockService.addProductsToStock(stockId, Quantities);
-
-        return "redirect:/stocks";
-    }
 
     @GetMapping("")
     public String stocksMain(Model model) {
@@ -126,16 +92,7 @@ public class StockController {
         return "redirect:/stocks";
     }
 
-    @PostMapping("/{id}/remove_stock_item")
-    public String postStockItemDelete(
-            @PathVariable(value = "id") long stockItemId,
-            @RequestParam(value = "num") Integer num,
-            Model model) {
-        log.info("Ban user stockItemId={}; num={}", stockItemId, num);
-        String id = String.valueOf(stockService.findStockItem(stockItemId).getId());
-        stockService.decreaseStockItemQuantity(stockItemId, num);
-        return "redirect:/stocks/details/" + id;
-    }
+
 
 
 }

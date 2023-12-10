@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
@@ -26,6 +28,15 @@ public class StockItem {
     private Stock stock;
 
     private int quantity;
+
+    private Float selling_price;
+
+
+    private LocalDateTime entrance_data;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     // Другие поля и методы доступа
 
