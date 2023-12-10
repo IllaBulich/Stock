@@ -33,7 +33,7 @@
             Панель администратора
         </a><br>
         </div>
-        <a style="text-align: center; width: 100%" href="/immovables/add" class="btn btn-primary my-2">Добавить недвижимость</a>
+
     <form th:action="@{/logout}" method="post">
         <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
         <button type="submit" style="text-align: center; width: 100%" class="btn btn-danger mb-2">
@@ -41,13 +41,6 @@
         </button>
     </form>
     </div>
-
-    <p style="text-align: center" >Моя недижемость</p>
-    <header th:insert="blocks/immovables :: immovables" th:with="immovables=${immovables}"></header>
-
-    <p style="text-align: center" >Арендуймая недижемость</p>
-    <header th:insert="blocks/immovables :: immovables" th:with="immovables=${rent}"></header>
-
 
 <div th:insert="blocks/footer :: footer"></div>
 </body>

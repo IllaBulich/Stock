@@ -45,11 +45,11 @@ public class ProductController {
             Model model) {
 //        User user = immovablesService.getUserByPrincipal(principal);
 
-        if (productService.getStockById(id) == null)
+        if (productService.getProductById(id) == null)
             return "redirect:/products";
 //        if(immovables.getUser() != user)
 //            return "redirect:/";
-        model.addAttribute("product", productService.getStockById(id));
+        model.addAttribute("product", productService.getProductById(id));
         return "product/edit";
     }
 
@@ -58,7 +58,7 @@ public class ProductController {
             @PathVariable(value = "id") long id,
             Product product,
             Principal principal) throws IOException {
-        productService.editStock(id, principal, product);
+        productService.editProduct(id, principal, product);
         return "redirect:/products";
     }
 
@@ -67,10 +67,10 @@ public class ProductController {
             @PathVariable(value = "id") long id,
             Principal principal,
             Model model) {
-        if (productService.getStockById(id) == null)
+        if (productService.getProductById(id) == null)
             return "redirect:/products";
 //        User user = immovablesService.getUserByPrincipal(principal);
-        model.addAttribute("product", productService.getStockById(id));
+        model.addAttribute("product", productService.getProductById(id));
 
         return "product/details";
     }
@@ -79,7 +79,7 @@ public class ProductController {
     public String postProductDelete(
             @PathVariable(value = "id") long id,
             Model model) {
-        productService.deleteStock(id);
+        productService.deleteProduct(id);
         return "redirect:/products";
     }
 

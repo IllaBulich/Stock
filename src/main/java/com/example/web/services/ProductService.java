@@ -1,5 +1,6 @@
 package com.example.web.services;
 
+import com.example.web.exception.ProductNotFoundException;
 import com.example.web.models.Product;
 import com.example.web.repo.ProductRepository;
 import lombok.RequiredArgsConstructor;
@@ -25,11 +26,11 @@ public class ProductService {
         productRepository.save(product);
     }
 
-    public Product getStockById(long id) {
+    public Product getProductById(long id) {
         return productRepository.findById(id).orElse(null);
     }
 
-    public void editStock(long id, Principal principal, Product productNow) {
+    public void editProduct(long id, Principal principal, Product productNow) {
 
         Product product = productRepository.findById(id).orElseThrow();
         product.setName(productNow.getName());
@@ -41,8 +42,13 @@ public class ProductService {
 
     }
 
-    public void deleteStock(long id) {
-        productRepository.deleteById(id);
+    public void deleteProduct(long id) {
+        try {
+            productRepository.deleteById(id);
+        } catch (Exception e){
+            throw new ProductNotFoundException("Продукт уже используется в системе поэтому его нельзя удалить");
+        }
+
     }
 
 

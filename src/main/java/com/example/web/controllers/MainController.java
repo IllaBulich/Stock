@@ -16,9 +16,7 @@ public class MainController {
 
     @GetMapping("/")
     public String home(
-            Principal principal,
             Model model){
-        model.addAttribute("user",userService.getUserByPrincipal(principal));
         return "home";
     }
 }

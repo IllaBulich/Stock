@@ -16,4 +16,6 @@ public class ExceptionController {
         model.addAttribute("error", e.getMessage());
         return "specificError";
     }
+
+
 }
