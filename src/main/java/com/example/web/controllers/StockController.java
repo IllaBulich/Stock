@@ -84,7 +84,7 @@ public class StockController {
         return "stock/details";
     }
 
-    @PostMapping("/{id}/remove")
+    @PostMapping("/remove/{id}")
     public String postStockDelete(
             @PathVariable(value = "id") long id,
             Model model) {

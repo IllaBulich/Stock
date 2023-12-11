@@ -107,6 +107,8 @@ public class StockItemService {
             plenum += (float) stockItem.getQuantity() /
                     stockItem.getProduct().getQuantity_rack();
         }
+        if (plenum + plenumNew <= stock.getNumber_racks())
+            stock.setOccupancy_status(plenum + plenumNew);
         return plenum + plenumNew <= stock.getNumber_racks();
     }
 
@@ -120,7 +122,8 @@ public class StockItemService {
 
         if (optionalStockItem.isPresent()) {
             StockItem stockItem = optionalStockItem.get();
-
+            Stock stock = stockItem.getStock();
+            stock.setOccupancy_status(stock.getOccupancy_status()-(quantityToRemove/stockItem.getProduct().getQuantity_rack()));
             // Уменьшаем количество продуктов в StockItem
             int currentQuantity = stockItem.getQuantity();
             int newQuantity = currentQuantity - quantityToRemove;

@@ -6,6 +6,7 @@ import com.example.web.models.StockItem;
 import com.example.web.services.ProductService;
 import com.example.web.services.StockItemService;
 import com.example.web.services.StockService;
+import com.example.web.services.WarehouseLogService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,9 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Slf4j
 @Controller
@@ -28,6 +27,39 @@ public class StockItemController {
     private ProductService productService;
     @Autowired
     private StockItemService stockItemService;
+    @Autowired
+    private WarehouseLogService logService;
+
+
+
+    @GetMapping("/chart-data")
+    @ResponseBody
+    public  Map<String, Object> getChartData(@RequestParam(name = "isActive", defaultValue = "true") boolean isActive) {
+
+
+        List<Object[]> warehouseLogs = logService.StatisticsData(isActive);
+        Map<String, Object> data = new HashMap<>();
+        List<String> labels = new ArrayList<>();
+        List<Double > values =new ArrayList<>();
+        for (Object[] element : warehouseLogs) {
+            labels.add((String) element[0]);
+            values.add((Double) element[1]);
+        }
+        data.put("labels", labels);
+        data.put("values",values);
+
+        return data;
+    }
+    @GetMapping("/statistics")
+    public String test(
+            @RequestParam(name = "isActive", defaultValue = "true")  boolean isActive ,
+            Model model){
+        log.info("isActive={}",isActive);
+        model.addAttribute("WarehouseLogs", logService.findByActive(isActive));
+        if (isActive) return "/item/receipt";
+        else return "/item/shipment";
+    }
+
     @GetMapping("/sales-products")
     public String salesProductsGet(Model model){
         List<StockItem> items = stockItemService.findAll();

@@ -36,6 +36,7 @@ public class StockService {
 
     public void saveStock(Principal principal, Stock stock) {
         log.info("Ban user id={}; Title={}", stock.getId(), stock.getTitle());
+        stock.setOccupancy_status((float) 0);
         stockRepository.save(stock);
     }
 

@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -17,6 +18,23 @@ import java.time.LocalDateTime;
 public class WarehouseLogService {
 
     private final WarehouseLogRepository logRepository;
+
+    public List<WarehouseLog> findAll() {
+        return logRepository.findAll();
+    }
+
+    public List<WarehouseLog> findByActive(boolean active){return  logRepository.findByActive( active);}
+
+
+
+    public List<Object[]> StatisticsData(boolean active){
+        List<Object[]> warehouseLogs = new ArrayList<>();
+        if(active) warehouseLogs = logRepository.getReceiptStatisticsData();
+        else  warehouseLogs = logRepository.getShipmentStatisticsData();
+
+        return warehouseLogs;
+    }
+
 
     public void pushReceipts(StockItem stockItem){
         if (stockItem != null){
@@ -28,6 +46,7 @@ public class WarehouseLogService {
             warehouseLog.setQuantity(stockItem.getQuantity());
             warehouseLog.setEntrance_data(stockItem.getEntrance_data());
             warehouseLog.setUser(stockItem.getUser());
+            warehouseLog.setActive(true);
             logRepository.save(warehouseLog);
         }
     }

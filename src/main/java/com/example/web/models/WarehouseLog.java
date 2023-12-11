@@ -30,7 +30,7 @@ public class WarehouseLog {
     private Float selling_price;
     private LocalDateTime exit_data;
     private LocalDateTime entrance_data;
-    @Column(columnDefinition = "BOOLEAN DEFAULT true")
+
     private boolean active;
 
 

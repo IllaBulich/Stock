@@ -25,6 +25,7 @@ public class Stock {
     private String street;
     private String address;
     private Integer number_racks;
+    private Float  occupancy_status;
 
     @OneToMany(mappedBy = "stock", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<StockItem> stockItems = new HashSet<>();
